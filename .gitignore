@@ -8,6 +8,16 @@
 *.so
 *.dylib
 
+# Editor cache and lock files
+*.swp
+*.swo
+.DS_Store
+
+# IDE
+.idea/
+.run
+.vscode/
+
 # Test binary, built with `go test -c`
 *.test
 
