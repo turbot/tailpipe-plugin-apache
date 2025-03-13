@@ -1,6 +1,7 @@
 package access_log
 
 import (
+	"github.com/turbot/go-kit/helpers"
 	"github.com/turbot/tailpipe-plugin-sdk/artifact_source"
 	"github.com/turbot/tailpipe-plugin-sdk/constants"
 	"github.com/turbot/tailpipe-plugin-sdk/formats"
@@ -11,6 +12,7 @@ import (
 )
 
 const AccessLogTableIdentifier = "apache_access_log"
+const AccessLogTableNilValue = "-"
 
 // AccessLogTable - table for apache access logs
 type AccessLogTable struct {
@@ -35,11 +37,6 @@ func (c *AccessLogTable) GetTableDefinition() *schema.TableSchema {
 	return &schema.TableSchema{
 		Name: AccessLogTableIdentifier,
 		Columns: []*schema.ColumnSchema{
-			// tp mapping
-			{
-				ColumnName: "tp_timestamp",
-				SourceName: "timestamp",
-			},
 			{
 				ColumnName: "tp_source_ip",
 				SourceName: "remote_addr",
@@ -140,15 +137,15 @@ func (c *AccessLogTable) GetTableDefinition() *schema.TableSchema {
 			},
 			{
 				ColumnName: "request_time",
-				Type:       "INTEGER",
+				Type:       "FLOAT",
 			},
 			{
 				ColumnName: "request_time_ms",
-				Type:       "INTEGER",
+				Type:       "FLOAT",
 			},
 			{
 				ColumnName: "request_time_us",
-				Type:       "INTEGER",
+				Type:       "FLOAT",
 			},
 			{
 				ColumnName: "connection_status",
@@ -198,4 +195,15 @@ func (c *AccessLogTable) defaultFormat() *formats.Regex {
 	}
 }
 
-// TODO: Implement EnrichRow
+func (c *AccessLogTable) EnrichRow(row *types.DynamicRow, sourceEnrichmentFields schema.SourceEnrichment) (*types.DynamicRow, error) {
+	if ts, ok := row.GetSourceValue("timestamp"); ok && ts != AccessLogTableNilValue {
+		t, err := helpers.ParseTime(ts)
+		if err != nil {
+			return nil, err
+		}
+		row.OutputColumns[constants.TpTimestamp] = *t
+	}
+
+	// now call the base class to do the rest of the enrichment
+	return c.CustomTableImpl.EnrichRow(row, sourceEnrichmentFields)
+}
