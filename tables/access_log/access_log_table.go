@@ -95,10 +95,6 @@ func (c *AccessLogTable) GetTableDefinition() *schema.TableSchema {
 				Type:       "VARCHAR",
 			},
 			{
-				ColumnName: "request_time",
-				Type:       "INTEGER",
-			},
-			{
 				ColumnName: "filename",
 				Type:       "VARCHAR",
 			},
@@ -177,7 +173,7 @@ func (c *AccessLogTable) GetTableDefinition() *schema.TableSchema {
 
 func (c *AccessLogTable) GetSourceMetadata() ([]*table.SourceMetadata[*types.DynamicRow], error) {
 	// ask our CustomTableImpl for the mapper
-	mapper, err := c.GetMapper()
+	mapper, err := c.Format.GetMapper()
 	if err != nil {
 		return nil, err
 	}
@@ -201,3 +197,5 @@ func (c *AccessLogTable) defaultFormat() *formats.Regex {
 		Layout: `^(?P<remote_addr>[^ ]*) (?P<remote_logname>[^ ]*) (?P<remote_user>[^ ]*) \[(?P<timestamp>[^\]]*)\] "(?P<request_method>\S+)(?: +(?P<request_uri>[^ ]+))?(?: +(?P<server_protocol>\S+))?" (?P<status>[^ ]*) (?P<body_bytes_sent>[^ ]*)(?: "(?P<http_referer>[^"]*)" "(?P<http_user_agent>[^"]*)")?$`,
 	}
 }
+
+// TODO: Implement EnrichRow

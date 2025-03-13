@@ -360,7 +360,7 @@ func Test_AccessLogTableFormat_GetRegex(t *testing.T) {
 			Name:   "test",
 		}
 		t.Run(tt.name, func(t *testing.T) {
-			got, err := format.getRegex()
+			got, err := format.GetRegex()
 			if err != nil {
 				if tt.wantErr {
 					return

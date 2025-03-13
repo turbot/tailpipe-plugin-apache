@@ -62,9 +62,9 @@ var apacheRegexMap = map[string]string{
 type AccessLogTableFormat struct {
 	// the name of this format instance
 	Name string `hcl:"name,label"`
+	// Description of the format
+	Description string `hcl:"description,optional"`
 	// the layout of the log line
-	// NOTE that as will contain grok patterns, this property is included in constants.GrokConfigProperties
-	// meaning and '{' will be auto-escaped in the hcl
 	Layout string `hcl:"layout"`
 }
 
@@ -72,34 +72,43 @@ func NewAccessLogTableFormat() formats.Format {
 	return &AccessLogTableFormat{}
 }
 
-func (c *AccessLogTableFormat) Validate() error {
+func (a *AccessLogTableFormat) Validate() error {
 	return nil
 }
 
 // Identifier returns the format TYPE
-func (c *AccessLogTableFormat) Identifier() string {
+func (a *AccessLogTableFormat) Identifier() string {
 	// format name is same as table name
 	return AccessLogTableIdentifier
 }
 
 // GetName returns the format instance name
-func (c *AccessLogTableFormat) GetName() string {
+func (a *AccessLogTableFormat) GetName() string {
 	// format name is same as table name
-	return c.Name
+	return a.Name
 }
 
-func (c *AccessLogTableFormat) GetMapper() (mappers.Mapper[*types.DynamicRow], error) {
+// SetName sets the name of this format instance
+func (a *AccessLogTableFormat) SetName(name string) {
+	a.Name = name
+}
+
+func (a *AccessLogTableFormat) GetDescription() string {
+	return a.Description
+}
+
+func (a *AccessLogTableFormat) GetMapper() (mappers.Mapper[*types.DynamicRow], error) {
 	// convert the layout to a regex
-	regex, err := c.getRegex()
+	regex, err := a.GetRegex()
 	if err != nil {
 		return nil, err
 	}
 	return mappers.NewRegexMapper[*types.DynamicRow](regex)
 }
 
-// getRegex converts the layout to a regex
-func (c *AccessLogTableFormat) getRegex() (string, error) {
-	logFormat := c.Layout
+// GetRegex converts the layout to a regex
+func (a *AccessLogTableFormat) GetRegex() (string, error) {
+	logFormat := a.Layout
 
 	// extract time format contents
 	timePattern := `%{([^}]+)}t`
@@ -163,6 +172,12 @@ func (c *AccessLogTableFormat) getRegex() (string, error) {
 	}
 
 	return logFormat, nil
+}
+
+func (a *AccessLogTableFormat) GetProperties() map[string]string {
+	return map[string]string{
+		"layout": a.Layout,
+	}
 }
 
 // timeFormatToRegex converts a strftime time format to a regex
