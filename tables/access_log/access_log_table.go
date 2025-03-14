@@ -29,7 +29,7 @@ func (c *AccessLogTable) GetSupportedFormats() *formats.SupportedFormats {
 			AccessLogTableIdentifier:    NewAccessLogTableFormat,
 			constants.SourceFormatRegex: formats.NewRegex,
 		},
-		DefaultFormat: c.defaultFormat(),
+		DefaultFormat: DefaultApacheAccessLogFormat,
 	}
 }
 
@@ -186,13 +186,6 @@ func (c *AccessLogTable) GetSourceMetadata() ([]*table.SourceMetadata[*types.Dyn
 			},
 		},
 	}, nil
-}
-
-func (c *AccessLogTable) defaultFormat() *formats.Regex {
-	// this regex format allows for parsing of both CLF and COMBINED log formats
-	return &formats.Regex{
-		Layout: `^(?P<remote_addr>[^ ]*) (?P<remote_logname>[^ ]*) (?P<remote_user>[^ ]*) \[(?P<timestamp>[^\]]*)\] "(?P<request_method>\S+)(?: +(?P<request_uri>[^ ]+))?(?: +(?P<server_protocol>\S+))?" (?P<status>[^ ]*) (?P<body_bytes_sent>[^ ]*)(?: "(?P<http_referer>[^"]*)" "(?P<http_user_agent>[^"]*)")?$`,
-	}
 }
 
 func (c *AccessLogTable) EnrichRow(row *types.DynamicRow, sourceEnrichmentFields schema.SourceEnrichment) (*types.DynamicRow, error) {
