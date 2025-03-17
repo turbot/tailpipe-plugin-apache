@@ -194,7 +194,7 @@ func (c *AccessLogTable) EnrichRow(row *types.DynamicRow, sourceEnrichmentFields
 		if err != nil {
 			return nil, err
 		}
-		row.OutputColumns[constants.TpTimestamp] = *t
+		row.OutputColumns[constants.TpTimestamp] = t
 	}
 
 	// now call the base class to do the rest of the enrichment
