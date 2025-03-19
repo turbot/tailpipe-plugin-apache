@@ -23,14 +23,8 @@ func (c *AccessLogTable) Identifier() string {
 	return AccessLogTableIdentifier
 }
 
-func (c *AccessLogTable) GetSupportedFormats() *formats.SupportedFormats {
-	return &formats.SupportedFormats{
-		Formats: map[string]func() formats.Format{
-			AccessLogTableIdentifier:    NewAccessLogTableFormat,
-			constants.SourceFormatRegex: formats.NewRegex,
-		},
-		DefaultFormat: DefaultApacheAccessLogFormat,
-	}
+func (c *AccessLogTable) GetDefaultFormat() formats.Format {
+	return DefaultApacheAccessLogFormat
 }
 
 func (c *AccessLogTable) GetTableDefinition() *schema.TableSchema {
