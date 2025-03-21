@@ -11,6 +11,7 @@ var DefaultApacheAccessLogFormat = &formats.Regex{
 }
 
 var AccessLogTableFormatPresets = []formats.Format{
+	DefaultApacheAccessLogFormat,
 	&AccessLogTableFormat{
 		Name:        "common",
 		Description: "Apache Common Log Format",
