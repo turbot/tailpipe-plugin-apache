@@ -14,8 +14,9 @@ func init() {
 	table.RegisterCustomTable[*access_log.AccessLogTable]()
 
 	// register formats
-	table.RegisterFormat(access_log.DefaultApacheAccessLogFormat)
-	table.RegisterFormat(access_log.AccessLogTableFormatPresets...)
+	table.RegisterFormatPresets(access_log.DefaultApacheAccessLogFormat)
+	table.RegisterFormatPresets(access_log.AccessLogTableFormatPresets...)
+	table.RegisterFormat[*access_log.AccessLogTableFormat]()
 }
 
 type Plugin struct {
