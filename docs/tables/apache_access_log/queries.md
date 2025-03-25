@@ -4,7 +4,7 @@
 
 ### Daily Request Trends
 
-Count requests per day to identify traffic patterns over time. This query helps visualize usage trends, detect potential traffic anomalies, and understand the overall load on your Apache server across different days.
+Count requests per day to identify traffic patterns over time. This query provides a comprehensive view of daily request volume, helping you understand usage patterns, peak periods, and potential seasonal variations in web traffic. The results can be used for capacity planning, identifying anomalies, and tracking the impact of site changes or marketing campaigns.
 
 ```sql
 select
@@ -20,7 +20,7 @@ order by
 
 ### Top 10 Clients by Request Count
 
-List the top 10 client IP addresses making requests. This query helps identify the most active clients, potentially revealing heavy users, bot traffic, or unusual access patterns that might require further investigation.
+List the top 10 client IP addresses making requests. This query helps identify high-volume clients, revealing potential bandwidth abuse, heavy users that might need rate limiting, or unusual access patterns that could indicate automated traffic. Understanding traffic distribution across clients is crucial for optimizing content delivery and resource allocation.
 
 ```sql
 select
@@ -39,13 +39,13 @@ limit 10;
 
 ### HTTP Status Code Distribution
 
-Analyze the distribution of HTTP status codes. This query helps understand the overall health of your websites and server, identifying success rates, client errors, and server errors.
+Analyze the distribution of HTTP status codes across your web traffic. This query provides essential insights into server health and client behavior by breaking down success rates, client errors, and server errors. Understanding this distribution helps identify potential issues, monitor service quality, and track the impact of server configuration changes.
 
 ```sql
 select
   status,
   count(*) as count,
-  round(count(*) * 100.0 / sum(count(*)) over (), 2) as percentage
+  round(count(*) * 100.0 / sum(count(*)) over (), 3) as percentage
 from
   apache_access_log
 group by
@@ -58,13 +58,13 @@ order by
 
 ### Top HTTP Methods
 
-Analyze the distribution of HTTP methods in your requests.
+Analyze the distribution of HTTP methods in your requests. This query reveals how clients interact with your server, helping identify unusual method usage patterns, potential security concerns, and API utilization trends. Understanding method distribution is crucial for security monitoring and ensuring proper server configuration.
 
 ```sql
 select
   request_method,
   count(*) as request_count,
-  round(count(*) * 100.0 / sum(count(*)) over (), 2) as percentage
+  round(count(*) * 100.0 / sum(count(*)) over (), 3) as percentage
 from
   apache_access_log
 group by
@@ -75,7 +75,7 @@ order by
 
 ### Busiest Days
 
-Identify the days with the most traffic.
+Identify the days with the highest request volume. This analysis helps optimize resource allocation, plan maintenance windows, and understand traffic patterns across different time periods. The data can be used to correlate traffic spikes with events or promotions and guide infrastructure scaling decisions.
 
 ```sql
 select
@@ -92,7 +92,7 @@ order by
 
 ### Busiest Hours
 
-Identify the hours with the most traffic.
+Track hourly traffic patterns to identify peak usage periods. This information is invaluable for scheduling maintenance, optimizing resource allocation, and ensuring adequate capacity during high-traffic periods. Understanding hourly patterns helps in making informed decisions about infrastructure scaling and content delivery optimization.
 
 ```sql
 select
@@ -109,7 +109,7 @@ order by
 
 ### Most Requested URLs
 
-Find the most frequently accessed URLs.
+Analyze the most frequently accessed URLs on your Apache server. This query reveals popular content and high-demand resources, helping optimize caching strategies and content distribution. Understanding URL access patterns is essential for improving user experience and server performance.
 
 ```sql
 select
@@ -129,7 +129,7 @@ limit 20;
 
 ### Error Distribution by Status Code
 
-Break down of different types of errors.
+Analyze the distribution of HTTP error responses across your web traffic. This query helps identify specific types of errors affecting your service, their frequency, and potential patterns that might indicate configuration issues or missing resources. Understanding error distribution is crucial for maintaining service quality and user experience.
 
 ```sql
 select
@@ -145,30 +145,11 @@ order by
   error_count desc;
 ```
 
-### Client Errors vs Server Errors
-
-Compare the number of client (4xx) vs server (5xx) errors over time.
-
-```sql
-select
-  date_trunc('hour', timestamp) as hour,
-  count(*) filter (where status >= 400 and status < 500) as client_errors,
-  count(*) filter (where status >= 500) as server_errors
-from
-  apache_access_log
-where
-  status >= 400
-group by
-  hour
-order by
-  hour desc;
-```
-
 ## Performance Monitoring
 
 ### Large Response Analysis
 
-Find requests returning large amounts of data.
+Identify requests generating substantial data transfer volumes. This query helps detect abnormally large responses that might impact server performance or indicate potential data exfiltration attempts. Understanding large response patterns is crucial for optimizing bandwidth usage, content delivery, and maintaining efficient server operation.
 
 ```sql
 select
@@ -190,7 +171,7 @@ limit 20;
 
 ### Browser Distribution
 
-Analyze which browsers are accessing your site.
+Analyze the distribution of client browsers accessing your site. This information helps optimize website compatibility, track mobile versus desktop usage trends, and identify outdated browser versions requiring support. Understanding browser patterns is essential for delivering optimal user experiences across different platforms.
 
 ```sql
 select
@@ -214,7 +195,7 @@ order by
 
 ### Bot Traffic Analysis
 
-Identify and analyze bot traffic.
+Monitor and analyze automated traffic patterns across your Apache server. This query helps distinguish between legitimate bot traffic (such as search engine crawlers) and potentially malicious automated access. Understanding bot behavior patterns is crucial for managing server resources and maintaining security.
 
 ```sql
 select
@@ -236,7 +217,7 @@ limit 20;
 
 ### Potential Security Threats
 
-Identify potentially malicious requests.
+Identify potentially malicious or suspicious requests targeting your server. This query detects common attack patterns, unauthorized access attempts, and potential security vulnerabilities by monitoring request patterns and payload characteristics. Early detection of security threats is essential for maintaining system integrity and protecting sensitive resources.
 
 ```sql
 select
@@ -260,7 +241,7 @@ limit 100;
 
 ### Rate Limiting Analysis
 
-Find potential DDoS attempts or aggressive crawlers.
+Detect aggressive request patterns that might indicate abuse or denial of service attempts. This query helps identify potential DDoS attacks, aggressive crawlers, or brute force attempts by monitoring request frequency and patterns from individual IP addresses. Understanding request patterns is crucial for implementing effective rate limiting policies.
 
 ```sql
 select
@@ -285,7 +266,7 @@ order by
 
 ### Failed Authentication Attempts
 
-Identify potential brute force attacks by detecting multiple failed authentication attempts.
+Track failed authentication attempts across your Apache server. This query helps identify potential brute force attacks or credential stuffing attempts by monitoring patterns of 401 status codes from specific IP addresses. Understanding authentication failure patterns is essential for protecting access to restricted resources and maintaining system security.
 
 ```sql
 select
@@ -308,14 +289,14 @@ order by
 
 ### Error Spikes
 
-Detect sudden spikes in error rates.
+Monitor sudden increases in error rates across your web traffic. This query helps identify potential attacks, system issues, or service degradation by detecting periods where error rates exceed normal thresholds. Understanding error rate patterns is crucial for maintaining service reliability and responding quickly to potential incidents.
 
 ```sql
 select
   date_trunc('minute', timestamp) as minute,
   count(*) as total_requests,
   count(*) filter (where status >= 400) as error_count,
-  round(count(*) filter (where status >= 400) * 100.0 / count(*), 2) as error_rate
+  round(count(*) filter (where status >= 400) * 100.0 / count(*), 3) as error_rate
 from
   apache_access_log
 group by
@@ -328,34 +309,9 @@ order by
   minute desc;
 ```
 
-### Directory Traversal Attempts
-
-Identify potential directory traversal attacks.
-
-```sql
-select
-  remote_addr,
-  request_uri,
-  status,
-  timestamp,
-  http_user_agent
-from
-  apache_access_log
-where
-  request_uri like '%../%'
-  or request_uri like '%/../%'
-  or request_uri like '%/./%'
-  or request_uri like '%/...%'
-  or request_uri like '%\\..\\%'
-  or request_uri like '%..%2f%'
-  or request_uri like '%..%2F%'
-order by
-  timestamp desc;
-```
-
 ### SQL Injection Attempts
 
-Detect potential SQL injection attempts in request URIs.
+Monitor potential SQL injection attack attempts against your web applications. This query helps identify malicious requests containing SQL syntax patterns that could indicate attempts to manipulate or extract data from backend databases. Understanding SQL injection patterns is crucial for protecting data integrity and preventing unauthorized database access.
 
 ```sql
 select
@@ -380,7 +336,7 @@ order by
 
 ### Geographic Anomalies
 
-Detect requests from unusual locations or known problematic regions.
+Analyze request patterns based on client IP address ranges to identify geographic access anomalies. This query helps detect requests from unusual locations or known problematic regions, aiding in the identification of potential security threats and traffic patterns that may require additional scrutiny or access controls.
 
 ```sql
 select
