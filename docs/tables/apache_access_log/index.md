@@ -196,20 +196,3 @@ partition "apache_access_log" "dated_logs" {
   }
 }
 ```
-
-
-Use the combined log format with additional SSL-related fields.
-
-```hcl
-format "apache_access_log" "ssl_combined" {
-  layout = `%h %l %u %t "%r" %>s %b "%{Referer}i" "%{User-agent}i" %{SSL_PROTOCOL}x %{SSL_CIPHER}x`
-}
-
-partition "apache_access_log" "ssl_logs" {
-  source "file" {
-    format     = format.apache_access_log.ssl_combined
-    paths      = ["/var/log/apache2/ssl_access"]
-    file_layout = `%{DATA}.log`
-  }
-}
-```
