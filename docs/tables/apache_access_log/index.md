@@ -105,3 +105,111 @@ order by
   request_count desc
 limit 10;
 ```
+
+## Example Configurations
+
+### Basic Configuration
+
+Collect standard Apache access logs from the default location.
+
+```hcl
+partition "apache_access_log" "my_apache_logs" {
+  source "file" {
+    paths       = ["/var/log/apache2/access"]
+    file_layout = `%{DATA}.log`
+  }
+}
+```
+
+### Minimal Format with Selected Fields
+
+Define a minimal format that only includes specific fields you need.
+
+```hcl
+format "apache_access_log" "minimal" {
+  layout = `$remote_addr $request_method`
+}
+
+partition "apache_access_log" "minimal_logs" {
+  source "file" {
+    format     = format.apache_access_log.minimal
+    paths      = ["/var/log/apache2/minimal"]
+    file_layout = `%{DATA}.log`
+  }
+}
+```
+
+### Filter for Error Logs Only
+
+Use the filter argument to collect only error responses.
+
+```hcl
+partition "apache_access_log" "error_logs" {
+  filter = "status >= 400"
+  
+  source "file" {
+    paths      = ["/var/log/apache2/access"]
+    file_layout = `%{DATA}.log`
+  }
+}
+```
+
+### Collect from Multiple Locations
+
+Collect logs from multiple directories or virtual hosts.
+
+```hcl
+partition "apache_access_log" "multi_vhost_logs" {
+  source "file" {
+    paths      = [
+      "/var/log/apache2/site1/access",
+      "/var/log/apache2/site2/access",
+      "/var/log/apache2/site3/access"
+    ]
+    file_layout = `%{DATA}.log`
+  }
+}
+```
+
+### Collect from Compressed Log Files
+
+If your log files are compressed, you can still collect from them.
+
+```hcl
+partition "apache_access_log" "compressed_logs" {
+  source "file" {
+    paths      = ["/var/log/apache2/archive"]
+    file_layout = `%{DATA}.log.gz`
+  }
+}
+```
+
+### Collect logs with Custom Path Structure
+
+For logs with specific directory structures including dates.
+
+```hcl
+partition "apache_access_log" "dated_logs" {
+  source "file" {
+    paths      = ["/var/log/apache2"]
+    file_layout = `%{YEAR:year}/%{MONTHNUM:month}/%{MONTHDAY:day}/access.log`
+  }
+}
+```
+
+
+Use the combined log format with additional SSL-related fields.
+
+```hcl
+format "apache_access_log" "ssl_combined" {
+  layout = `%h %l %u %t "%r" %>s %b "%{Referer}i" "%{User-agent}i" %{SSL_PROTOCOL}x %{SSL_CIPHER}x`
+}
+
+partition "apache_access_log" "ssl_logs" {
+  source "file" {
+    format     = format.apache_access_log.ssl_combined
+    paths      = ["/var/log/apache2/ssl_access"]
+    file_layout = `%{DATA}.log`
+  }
+}
+```
