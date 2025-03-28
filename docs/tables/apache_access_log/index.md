@@ -7,6 +7,23 @@ description: "Apache access logs capture detailed information about requests pro
 
 The `apache_access_log` table allows you to query Apache HTTP server access logs. This table provides detailed information about HTTP requests processed by your Apache servers, including client details, request information, response codes, and timing data.
 
+By default, this table works with Apache's "combined" log format:
+
+```
+LogFormat "%h %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-agent}i\"" combined
+```
+
+Which contains the following fields:
+- `%h` - Remote host (client IP)
+- `%l` - Remote logname (from identd, if supplied)
+- `%u` - Remote user (from auth)
+- `%t` - Time the request was received
+- `%r` - First line of request (method, URI, protocol)
+- `%>s` - Status code
+- `%b` - Size of response in bytes
+- `%{Referer}i` - Referer header
+- `%{User-agent}i` - User-Agent header
+
 ## Configure
 
 Create a [partition](https://tailpipe.io/docs/manage/partition) for `apache_access_log`:
@@ -123,11 +140,11 @@ partition "apache_access_log" "my_apache_logs" {
 
 ### Minimal Format with Selected Fields
 
-Define a minimal format that only includes specific fields you need.
+Define a minimal format that only includes specific fields you need. See the [Apache log configuration documentation](https://httpd.apache.org/docs/current/mod/mod_log_config.html#formats) for a complete list of available format fields.
 
 ```hcl
 format "apache_access_log" "minimal" {
-  layout = `$remote_addr $request_method`
+  layout = `%h %l %u %t`
 }
 
 partition "apache_access_log" "minimal_logs" {
@@ -180,6 +197,19 @@ partition "apache_access_log" "compressed_logs" {
   source "file" {
     paths      = ["/var/log/apache2/archive"]
     file_layout = `%{DATA}.log.gz`
+  }
+}
+```
+
+### Collect from ZIP Archives
+
+For logs archived in ZIP files, you can collect them directly.
+
+```hcl
+partition "apache_access_log" "zip_logs" {
+  source "file" {
+    paths      = ["/var/log/apache2/archive"]
+    file_layout = `%{DATA}.log.zip`
   }
 }
 ```
