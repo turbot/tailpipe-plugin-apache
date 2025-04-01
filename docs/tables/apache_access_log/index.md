@@ -214,19 +214,6 @@ partition "apache_access_log" "zip_logs" {
 }
 ```
 
-### Collect logs with date-based directory structure
-
-For logs with specific directory structures including dates.
-
-```hcl
-partition "apache_access_log" "dated_logs" {
-  source "file" {
-    paths      = ["/var/log/apache2"]
-    file_layout = `%{YEAR:year}/%{MONTHNUM:month}/%{MONTHDAY:day}/access.log`
-  }
-}
-```
-
 ### Collect logs from S3 bucket
 
 For logs archived in S3, commonly used for long-term storage and centralized logging.
