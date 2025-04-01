@@ -7,7 +7,7 @@ description: "Apache access logs capture detailed information about requests pro
 
 The `apache_access_log` table allows you to query Apache HTTP server access logs. This table provides detailed information about HTTP requests processed by your Apache servers, including client details, request information, response codes, and timing data.
 
-By default, this table works with Apache's "combined" log format:
+By default, this table works with Apache's [combined](https://httpd.apache.org/docs/2.4/logs.html#accesslog) log format:
 
 ```
 LogFormat "%h %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-agent}i\"" combined
@@ -23,6 +23,8 @@ Which contains the following fields:
 - `%b` - Size of response in bytes
 - `%{Referer}i` - Referer header
 - `%{User-agent}i` - User-Agent header
+
+If your logs use a different format, you can specify a custom format as shown in the [example](https://hub.tailpipe.io/plugins/turbot/apache/tables/apache_access_log#collect-logs-with-custom-log-format) configurations below.
 
 ## Configure
 
@@ -138,19 +140,19 @@ partition "apache_access_log" "my_apache_logs" {
 }
 ```
 
-### Collect specific fields with minimal format
+### Collect logs with custom log format
 
 Define a minimal format that only includes specific fields you need. See the [Apache log configuration documentation](https://httpd.apache.org/docs/current/mod/mod_log_config.html#formats) for a complete list of available format fields.
 
 ```hcl
 format "apache_access_log" "minimal" {
-  layout = `%h %l %u %t`
+  layout = `%h %l %u %t` # minimal format with fields client IP, remote logname, remote user, and timestamp
 }
 
 partition "apache_access_log" "minimal_logs" {
   source "file" {
-    format     = format.apache_access_log.minimal
-    paths      = ["/var/log/apache2/minimal"]
+    format      = format.apache_access_log.minimal
+    paths       = ["/var/log/apache2/minimal"]
     file_layout = `%{DATA}.log`
   }
 }
@@ -165,7 +167,7 @@ partition "apache_access_log" "error_logs" {
   filter = "status >= 400"
   
   source "file" {
-    paths      = ["/var/log/apache2/access"]
+    paths       = ["/var/log/apache2/access"]
     file_layout = `%{DATA}.log`
   }
 }
@@ -178,7 +180,7 @@ Collect logs from multiple directories or virtual hosts.
 ```hcl
 partition "apache_access_log" "multi_vhost_logs" {
   source "file" {
-    paths      = [
+    paths = [
       "/var/log/apache2/site1/access",
       "/var/log/apache2/site2/access",
       "/var/log/apache2/site3/access"
@@ -195,7 +197,7 @@ If your log files are compressed, you can still collect from them.
 ```hcl
 partition "apache_access_log" "compressed_logs" {
   source "file" {
-    paths      = ["/var/log/apache2/archive"]
+    paths       = ["/var/log/apache2/archive"]
     file_layout = `%{DATA}.log.gz`
   }
 }
@@ -208,7 +210,7 @@ For logs archived in ZIP files, you can collect them directly.
 ```hcl
 partition "apache_access_log" "zip_logs" {
   source "file" {
-    paths      = ["/var/log/apache2/archive"]
+    paths       = ["/var/log/apache2/archive"]
     file_layout = `%{DATA}.log.zip`
   }
 }
