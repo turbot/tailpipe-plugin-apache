@@ -7,7 +7,7 @@ description: "Apache access logs capture detailed information about requests pro
 
 The `apache_access_log` table allows you to query Apache HTTP server access logs. This table provides detailed information about HTTP requests processed by your Apache servers, including client details, request information, response codes, and timing data.
 
-By default, this table works with Apache's [combined](https://httpd.apache.org/docs/2.4/logs.html#accesslog) log format:
+By default, this table works with Apache's [combined](https://httpd.apache.org/docs/2.4/logs.html#combined) log format:
 
 ```
 LogFormat "%h %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-agent}i\"" combined
