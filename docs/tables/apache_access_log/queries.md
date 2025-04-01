@@ -1,5 +1,3 @@
-# Example Queries for apache_access_log Table
-
 ## Activity Examples
 
 ### Daily Request Trends

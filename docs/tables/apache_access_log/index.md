@@ -80,7 +80,7 @@ order by
   tp_timestamp desc;
 ```
 
-### High Resource Usage Requests
+### Top 10 High Resource Usage Requests
 
 Identify requests with high resource usage by analyzing bytes transferred and request times.
 
@@ -104,7 +104,7 @@ order by
 limit 10;
 ```
 
-### High Traffic Sources
+### Top 10 High Traffic Sources
 
 Identify the IP addresses generating the most traffic.
 
@@ -125,7 +125,7 @@ limit 10;
 
 ## Example Configurations
 
-### Basic Configuration
+### Collect logs from default Apache location
 
 Collect standard Apache access logs from the default location.
 
@@ -138,7 +138,7 @@ partition "apache_access_log" "my_apache_logs" {
 }
 ```
 
-### Minimal Format with Selected Fields
+### Collect specific fields with minimal format
 
 Define a minimal format that only includes specific fields you need. See the [Apache log configuration documentation](https://httpd.apache.org/docs/current/mod/mod_log_config.html#formats) for a complete list of available format fields.
 
@@ -156,7 +156,7 @@ partition "apache_access_log" "minimal_logs" {
 }
 ```
 
-### Filter for Error Logs Only
+### Collect only error responses
 
 Use the filter argument to collect only error responses.
 
@@ -171,7 +171,7 @@ partition "apache_access_log" "error_logs" {
 }
 ```
 
-### Collect from Multiple Locations
+### Collect logs from multiple virtual hosts
 
 Collect logs from multiple directories or virtual hosts.
 
@@ -188,7 +188,7 @@ partition "apache_access_log" "multi_vhost_logs" {
 }
 ```
 
-### Collect from Compressed Log Files
+### Collect logs from gzip compressed files
 
 If your log files are compressed, you can still collect from them.
 
@@ -201,7 +201,7 @@ partition "apache_access_log" "compressed_logs" {
 }
 ```
 
-### Collect from ZIP Archives
+### Collect logs from ZIP archives
 
 For logs archived in ZIP files, you can collect them directly.
 
@@ -214,7 +214,7 @@ partition "apache_access_log" "zip_logs" {
 }
 ```
 
-### Collect logs with Custom Path Structure
+### Collect logs with date-based directory structure
 
 For logs with specific directory structures including dates.
 
