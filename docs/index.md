@@ -1,8 +1,17 @@
-# Apache Plugin for Tailpipe
+---
+organization: Turbot
+category: ["software development"]
+icon_url: "/images/plugins/turbot/apache.svg"
+brand_color: "#CC2336"
+display_name: "Apache"
+description: "Tailpipe plugin for collecting and querying Apache logs."
+og_description: "Collect Apache logs and query them instantly with SQL! Open source CLI. No DB required."
+og_image: "/images/plugins/turbot/apache-social-graphic.png"
+---
+
+# Apache + Tailpipe
 
 [Tailpipe](https://tailpipe.io) is an open-source CLI tool that allows you to collect logs and query them with SQL.
-
-[Apache](https://httpd.apache.org/) is a popular open-source web server.
 
 The [Apache Plugin for Tailpipe](https://hub.tailpipe.io/plugins/turbot/apache) allows you to collect and query Apache access logs using SQL to track activity, monitor trends, detect anomalies, and more!
 
@@ -11,8 +20,7 @@ The [Apache Plugin for Tailpipe](https://hub.tailpipe.io/plugins/turbot/apache) 
 - Community: [Join #tailpipe on Slack →](https://turbot.com/community/join)
 - Get involved: [Issues](https://github.com/turbot/tailpipe-plugin-apache/issues)
 
-Collect and query logs:
-![image](docs/images/apache_access_log_terminal.png)
+![image](https://raw.githubusercontent.com/turbot/tailpipe-plugin-apache/main/docs/images/apache_access_log_terminal.png?type=thumbnail)
 
 ## Getting Started
 
@@ -91,52 +99,3 @@ limit 1;
 | 186.187.161.169 | 502    | /path/to/web/page | POST           | 12345         |
 +-----------------+--------+-------------------+----------------+---------------+
 ```
-
-
-## Developing
-
-Prerequisites:
-
-- [Tailpipe](https://tailpipe.io/downloads)
-- [Golang](https://golang.org/doc/install)
-
-Clone:
-
-```sh
-git clone https://github.com/turbot/tailpipe-plugin-apache.git
-cd tailpipe-plugin-apache
-```
-
-After making your local changes, build the plugin, which automatically installs the new version to your `~/.tailpipe/plugins` directory:
-
-```sh
-make
-```
-
-Re-collect your data:
-
-```sh
-tailpipe collect apache_access_log
-```
-
-Try it!
-
-```sh
-tailpipe query
-> .inspect apache_access_log
-```
-
-## Open Source & Contributing
-
-This repository is published under the [Apache 2.0](https://www.apache.org/licenses/LICENSE-2.0) (source code) and [CC BY-NC-ND](https://creativecommons.org/licenses/by-nc-nd/2.0/) (docs) licenses. Please see our [code of conduct](https://github.com/turbot/.github/blob/main/CODE_OF_CONDUCT.md). We look forward to collaborating with you!
-
-[Tailpipe](https://tailpipe.io) is a product produced from this open source software, exclusively by [Turbot HQ, Inc](https://turbot.com). It is distributed under our commercial terms. Others are allowed to make their own distribution of the software, but cannot use any of the Turbot trademarks, cloud services, etc. You can learn more in our [Open Source FAQ](https://turbot.com/open-source).
-
-## Get Involved
-
-**[Join #tailpipe on Slack →](https://turbot.com/community/join)**
-
-Want to help but don't know where to start? Pick up one of the `help wanted` issues:
-
-- [Tailpipe](https://github.com/turbot/tailpipe/labels/help%20wanted)
-- [Apache Plugin](https://github.com/turbot/tailpipe-plugin-apache/labels/help%20wanted)
