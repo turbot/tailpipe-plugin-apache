@@ -24,7 +24,7 @@ Which contains the following fields:
 - `%{Referer}i` - Referer header
 - `%{User-agent}i` - User-Agent header
 
-If your logs use a different format, you can specify a custom format as shown in the [example](https://hub.tailpipe.io/plugins/turbot/apache/tables/apache_access_log#collect-logs-with-custom-log-format) configurations below.
+If your logs use a different format, you can specify a custom format as shown in the [example configurations](https://hub.tailpipe.io/plugins/turbot/apache/tables/apache_access_log#collect-logs-with-custom-log-format) below.
 
 ## Configure
 
