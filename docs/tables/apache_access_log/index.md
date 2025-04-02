@@ -230,7 +230,6 @@ partition "apache_access_log" "s3_logs" {
     connection  = connection.aws.logging
     bucket      = "apache-access-logs"
     prefix      = "logs/"
-    file_layout = `%{YEAR:year}/%{MONTHNUM:month}/%{MONTHDAY:day}/%{DATA}.log`
   }
 }
 ```
