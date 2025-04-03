@@ -44,7 +44,7 @@ vi ~/.tailpipe/config/apache.tpc
 partition "apache_access_log" "my_logs" {
   source "file" {
     paths       = ["/var/log/apache/access/"]
-    file_layout = "%{DATA}.log"
+    file_layout = `%{DATA}.log`
   }
 }
 ```
