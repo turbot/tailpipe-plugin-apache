@@ -54,9 +54,9 @@ var apacheRegexMap = map[string]string{
 	`%I`:             `(?P<bytes_received>[^ ]*)`,                                                           // bytes_received
 	`%O`:             `(?P<bytes_sent>[^ ]*)`,                                                               // bytes_sent
 	`%S`:             `(?P<bytes_transferred>[^ ]*)`,                                                        // bytes sent and received
-	`%{Referer}i`:    `(?P<http_referer>[^"]*)`,                                                             // Referer
-	`%{User-agent}i`: `(?P<http_user_agent>[^"]*)`,                                                          // User-agent (linux, macOS)
-	`%{User-Agent}i`: `(?P<http_user_agent>[^"]*)`,                                                          // User-Agent (Windows)
+	`%{Referer}i`:    `(?P<http_referer>(?:\\.|[^"\\])*)`,                                                   // Referer
+	`%{User-agent}i`: `(?P<http_user_agent>(?:\\.|[^"\\])*)`,                                                // User-agent (linux, macOS)
+	`%{User-Agent}i`: `(?P<http_user_agent>(?:\\.|[^"\\])*)`,                                                // User-Agent (Windows)
 }
 
 type AccessLogTableFormat struct {
