@@ -14,12 +14,12 @@ var AccessLogTableFormatPresets = []formats.Format{
 	DefaultApacheAccessLogFormat,
 	&AccessLogTableFormat{
 		Name:        "common",
-		Description: "Apache Common Log Format",
+		Description: "Apache Common Log Format.",
 		Layout:      `%h %l %u %t "%r" %>s %b`,
 	},
 	&AccessLogTableFormat{
 		Name:        "combined",
-		Description: "Apache Combined Log Format",
+		Description: "Apache Combined Log Format.",
 		Layout:      `%h %l %u %t "%r" %>s %b "%{Referer}i" "%{User-agent}i"`,
 	},
 }

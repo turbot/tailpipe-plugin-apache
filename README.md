@@ -44,12 +44,12 @@ vi ~/.tailpipe/config/apache.tpc
 partition "apache_access_log" "my_logs" {
   source "file" {
     paths       = ["/var/log/apache/access/"]
-    file_layout = "%{DATA}.log"
+    file_layout = `%{DATA}.log`
   }
 }
 ```
 
-**Note**: By default, the `apache_access_log` table can collect logs using the [combined log format](https://httpd.apache.org/docs/2.4/logs.html#combined). If your logs use a custom log format, please see [Collect logs with custom log format](https://hub.tailpipe.io/plugins/turbot/apache/tables/apache_access_log#collect-logs-with-custom-log-format).
+**Note**: By default, the `apache_access_log` table can collect logs using the [common](https://httpd.apache.org/docs/current/logs.html#common) and [combined](https://httpd.apache.org/docs/current/logs.html#combined) log formats. If your logs use a custom log format, please see [Collect logs with custom log format](https://hub.tailpipe.io/plugins/turbot/apache/tables/apache_access_log#collect-logs-with-custom-log-format).
 
 Download, enrich, and save logs from your source ([examples](https://tailpipe.io/docs/reference/cli/collect)):
 
