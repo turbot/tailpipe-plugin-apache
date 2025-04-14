@@ -6,8 +6,8 @@ import (
 
 var DefaultApacheAccessLogFormat = &formats.Regex{
 	Name:        "apache_default",
-	Description: "Default regex format that covers both Apache Common and Combined log formats.",
-	Layout:      `^(?P<remote_addr>[^ ]*) (?P<remote_logname>[^ ]*) (?P<remote_user>[^ ]*) \[(?P<timestamp>[^\]]*)\] "(?P<request_method>\S+)(?: +(?P<request_uri>[^ ]+))?(?: +(?P<server_protocol>\S+))?" (?P<status>[^ ]*) (?P<body_bytes_sent>[^ ]*)(?: "(?P<http_referer>[^"]*)" "(?P<http_user_agent>[^"]*)")?$`,
+	Description: "A default regex format that covers both Apache Common and Combined log formats.",
+	Layout:      `^(?P<remote_addr>[^ ]*) (?P<remote_logname>[^ ]*) (?P<remote_user>[^ ]*) \[(?P<timestamp>[^\]]*)\] "(?P<request_method>\S+)(?: +(?P<request_uri>[^ ]+))?(?: +(?P<server_protocol>\S+))?" (?P<status>[^ ]*) (?P<body_bytes_sent>[^ ]*)(?: "(?P<http_referer>(?:\\.|[^"\\])*)" "(?P<http_user_agent>(?:\\.|[^"\\])*)")?$`,
 }
 
 var AccessLogTableFormatPresets = []formats.Format{
