@@ -99,3 +99,13 @@ limit 1;
 | 186.187.161.169 | 502    | /path/to/web/page | POST           | 12345         |
 +-----------------+--------+-------------------+----------------+---------------+
 ```
+
+## Detections as Code with Powerpipe
+
+Pre-built dashboards and detections for the Apache plugin are available in [Powerpipe](https://powerpipe.io) mods, helping you monitor and analyze activity across your Apache servers.
+
+For example, the [Apache Access Log Detections mod](https://hub.powerpipe.io/mods/turbot/tailpipe-mod-apache-access-log-detections) scans your Apache access logs for anomalies, such as sql injestion attacks on your web application.
+
+Dashboards and detections are [open source](https://github.com/topics/tailpipe-mod), allowing easy customization and collaboration.
+
+To get started, choose a mod from the [Powerpipe Hub](https://hub.powerpipe.io/?engines=tailpipe&q=apache).
