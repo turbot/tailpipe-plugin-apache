@@ -22,6 +22,8 @@ The [Apache Plugin for Tailpipe](https://hub.tailpipe.io/plugins/turbot/apache) 
 
 ![image](https://raw.githubusercontent.com/turbot/tailpipe-plugin-apache/main/docs/images/apache_access_log_terminal.png?type=thumbnail)
 
+![image](https://raw.githubusercontent.com/turbot/tailpipe-plugin-apache/main/docs/images/apache_access_log_owasp_top_10_dashboard.png?type=thumbnail)
+
 ## Getting Started
 
 Install Tailpipe from the [downloads](https://tailpipe.io/downloads) page:
