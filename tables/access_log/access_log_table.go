@@ -189,7 +189,7 @@ func (c *AccessLogTable) GetTableDefinition() *schema.TableSchema {
 				Type:        "integer",
 			},
 		},
-		NullValue: "-", // default null value
+		NullIf: "-", // default null value
 	}
 }
 
